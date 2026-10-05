@@ -1,0 +1,103 @@
+Aplicativo Mobile
+
+* Desenvolvimento utilizando React Native com Expo;
+* Utilização do Expo Router para gerenciamento das rotas;
+* Estrutura do projeto organizada e modular, seguindo o padrão apresentado na imagem.
+
+Autenticação
+
+* Autenticação baseada em JWT;
+* Gerenciamento da sessão utilizando cookies;
+* Controle de acesso conforme o perfil e as permissões do usuário.
+
+Recursos Operacionais Mobile
+
+* Integração com recursos nativos do dispositivo, como GPS, câmera e demais funcionalidades necessárias para a operação do aplicativo.
+
+Dados
+
+* Inicialmente, utilização de dados mockados para desenvolvimento e validação das funcionalidades;
+* Estrutura preparada para futura integração com a API e os dados reais.
+
+================================================================================
+PROJETO ADICIONADO: PAM FITNESS & TELEMETRIA MOBILE
+================================================================================
+
+1. IDENTIFICAÇÃO DO PROJETO
+--------------------------------------------------------------------------------
+* Nome do Aplicativo: PAM Fitness (Treino Inteligente com Sensores e Auditoria)
+* Disciplina: Programação de Aplicativos Mobile (PAM) — FATEC
+* Plataforma Alvo: Android, iOS e Web
+* Repositório / Código-Fonte: App PAM/
+* Branch Oficial: Hernandes
+* Status da Integração com os Requisitos: 100% Conforme
+
+2. MAPEAMENTO DA CONFORMIDADE COM CADA REQUISITO
+--------------------------------------------------------------------------------
+
+[REQUISITO 1: APLICATIVO MOBILE]
+- React Native com Expo:
+  * Desenvolvido com Expo SDK 57, React Native 0.86 e TypeScript 6.0.
+  * Suporte multiplataforma com foco mobile-first e otimização OLED (Dark Mode Atlântico).
+- Expo Router para gerenciamento de rotas:
+  * Roteamento moderno baseado em diretórios dentro de 'src/app/'.
+  * Uso de grupos de rota isolados logicamente:
+    - '(auth)': fluxo público de autenticação (Login e Cadastro).
+    - '(app)': fluxo autenticado e protegido (Dashboard, Painel Admin, Treino e Sensores).
+  * Layout raiz mestre ('_layout.tsx') gerenciando Providers globais e proteção de rotas.
+- Estrutura organizada e modular conforme padrão da imagem guia:
+  * Segue rigorosamente a árvore de diretórios apresentada na IDE de referência:
+    - 'src/app/(app)/': telas autenticadas (dashboard.tsx, dashboard.android.tsx, admin.tsx).
+    - 'src/app/(auth)/': telas de entrada (index.tsx, index.android.tsx, register.tsx).
+    - 'src/constants/': design tokens e paleta de cores unificada (colors.ts).
+    - 'src/contexts/': contexto reativo de autenticação e sessão (AuthContext.tsx).
+    - 'src/integration/': camada de rede desacoplada com endpoints e mock (authIntegration.ts).
+    - 'src/components/': componentes de interface reutilizáveis.
+    - 'src/hooks/': hooks customizados para sensores de hardware e cronômetro.
+    - 'src/services/': serviços utilitários de geodésia, persistência e storage.
+    - 'src/types/': contratos e tipagens TypeScript fortes.
+
+[REQUISITO 2: AUTENTICAÇÃO]
+- Autenticação baseada em JWT (JSON Web Token):
+  * Módulo 'src/integration/authIntegration.ts' implementa a geração, encoding e verificação de tokens JWT.
+  * Token composto por Header, Payload assinado contendo ID do usuário, e-mail, roles de acesso e carimbo de data/hora (expiração em 24h).
+  * Cabeçalho HTTP padronizado 'Authorization: Bearer <token>' para validação de requisições autenticadas.
+- Gerenciamento de sessão utilizando cookies:
+  * Simulação e manipulação padronizada de cookies de sessão ('Set-Cookie: session_token=...; HttpOnly; Path=/').
+  * Persistência segura em armazenamento local (@app_pam:session_v1 e @app_pam:cookies_v1) via AsyncStorage.
+  * Restauração automática de sessão durante a inicialização do app no hook 'useAuth()'.
+- Controle de acesso por perfil e permissões (RBAC):
+  * Suporte a múltiplos perfis de acesso (Roles: 'USER' e 'ADMIN').
+  * Rota exclusiva 'src/app/(app)/admin.tsx' acessível unicamente para perfis com permissão de administrador ('ADMIN').
+  * Renderização condicional e bloqueio automático de rotas e ações sensíveis baseados em 'auth.roles'.
+
+[REQUISITO 3: RECURSOS OPERACIONAIS MOBILE]
+- GPS / Geolocalização Nativa:
+  * Módulo 'expo-location' integrado no hook 'useLocationTracker.ts'.
+  * Cálculo em tempo real da distância acumulada via fórmula matemática de Haversine.
+  * Telemetria geodésica esportiva com ritmo de Pacing (MM'SS" /km) e velocidade em km/h.
+  * Filtro de descarte de ruídos contra saltos anômalos de sinal de satélite.
+- Câmera Nativa e Seleção de Imagens:
+  * Módulo 'expo-camera' com o componente moderno 'CameraView' para captura instantânea de fotos de anilhas, pesos e aparelhos durante a execução de séries.
+  * Módulo 'expo-image-picker' para auditoria e upload visual diretamente no dashboard nativo.
+  * Vinculação de fotos a notas de treino e histórico com visualização em modal de tela cheia.
+- Sensores de Movimento / Acelerômetro Biomecânico:
+  * Módulo 'expo-sensors' integrado no hook 'useArmMotionTracker.ts'.
+  * Magnitude euclidiana tridimensional invariante à orientação: sqrt(x² + y² + z²).
+  * Máquina de Estados Finitos (FSM) com filtro de debounce de 700ms para contagem precisa de repetições e cálculo de cadência em tempo real (RPM).
+
+[REQUISITO 4: DADOS]
+- Dados Mockados para validação inicial:
+  * Base de dados mockada com usuários pré-configurados para testes imediatos:
+    1. Aluno / Usuário Padrão:
+       - E-mail: aluno@fatec.br
+       - Senha: fatec123
+       - Role: USER (acesso ao Dashboard, Treino, Câmera e Histórico)
+    2. Professor / Administrador:
+       - E-mail: admin@fatec.br
+       - Senha: admin123
+       - Role: ADMIN (acesso irrestrito, incluindo Painel Administrativo em admin.tsx)
+  * Histórico de treinos e métricas com suporte a persistência offline completa.
+- Estrutura preparada para API e dados reais:
+  * Camada 'src/integration/authIntegration.ts' isolada por interfaces TypeScript.
+  * Facilidade de substituição das funções mock por chamadas HTTP 'fetch'/'axios' a qualquer backend RESTful (Spring Boot, Node.js/Express, NestJS) sem alterar a interface gráfica.
