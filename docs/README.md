@@ -1,9 +1,49 @@
 # PAM Fitness — Documentação da Arquitetura e Escopo
 
 Aplicativo mobile desenvolvido em **React Native** com **Expo SDK 57** e **TypeScript**, focado em treinos com monitoramento por sensores de hardware do smartphone:
-- **Sensor de Movimento (Acelerômetro)**: detecção e contagem de repetições no braço.
-- **Sensor de Localização (GPS)**: distância, velocidade e ritmo de pacing em tempo real.
-- **Sensor de Câmera**: registro fotográfico de cargas, repetições e equipamentos.
+- **Sensor de Movimento (Acelerômetro MEMS)**: detecção e contagem automática de repetições e cadência no braço.
+- **Sensor de Localização (GPS / GNSS)**: distância geodésica, velocidade e ritmo de pacing esportivo em tempo real.
+- **Sensor Óptico (Câmera Nativa)**: registro fotográfico e auditoria de cargas, repetições e equipamentos.
+- **Persistência Local Offline**: armazenamento local seguro no dispositivo via `@react-native-async-storage/async-storage`.
+
+---
+
+## 📸 Telas da Aplicação Real (Pasta `prints/`)
+
+<table>
+  <thead>
+    <tr align="center">
+      <th width="25%">Sensor de Braço (Reps)</th>
+      <th width="25%">GPS & Pacing</th>
+      <th width="25%">Câmera de Séries</th>
+      <th width="25%">Histórico de Treinos</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr valign="top">
+      <td>
+        <img src="../prints/01_treino_sensor_braco.png" alt="Sensor de Braço" width="100%" />
+        <br>
+        <small>Detecção de repetições, cadência RPM e FSM de subida/descida.</small>
+      </td>
+      <td>
+        <img src="../prints/02_treino_gps_pacing.png" alt="GPS & Pacing" width="100%" />
+        <br>
+        <small>Pacing instantâneo (min/km), velocidade e distância via Haversine.</small>
+      </td>
+      <td>
+        <img src="../prints/03_camera_auditoria_reps.png" alt="Câmera de Séries" width="100%" />
+        <br>
+        <small>CameraView nativa, lanterna LED (torch) e anotações da série.</small>
+      </td>
+      <td>
+        <img src="../prints/04_historico_sessoes.png" alt="Histórico" width="100%" />
+        <br>
+        <small>Totais agregados, persistência AsyncStorage e galeria de fotos.</small>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 ---
 
@@ -36,31 +76,38 @@ Oferecer ao atleta ou praticante de academia uma experiência esportiva completa
 
 ```text
 App PAM/
-├── docs/                           # documentacao completa do codigo e funcoes
-│   ├── README.md                   # visao geral, arquitetura e escopo
-│   ├── SENSORES.md                 # explicacao tecnica dos 3 sensores
-│   ├── FUNCOES_REACT.md            # guia completo de funcoes e hooks react
-│   └── GUIA_DE_CHAMADAS.md         # catalogo de funcoes e fluxo de dados
+├── docs/                           # Documentação técnica e especificações acadêmicas
+│   ├── PAM_Fitness_Documentacao_Completa.pdf # Manual técnico completo unificado em PDF
+│   ├── build_documentation_pdf.py  # Script gerador do PDF consolidado
+│   ├── README.md                   # Visão geral, arquitetura e escopo
+│   ├── SENSORES.md                 # Explicação técnica dos 3 sensores
+│   ├── FUNCOES_REACT.md            # Guia completo de funções e hooks React/Expo
+│   └── GUIA_DE_CHAMADAS.md         # Catálogo de funções e fluxo de dados
+├── prints/                         # Capturas de tela reais do aplicativo
+│   ├── 01_treino_sensor_braco.png  # Tela principal: modo braço e reps
+│   ├── 02_treino_gps_pacing.png    # Tela principal: modo GPS e pacing
+│   ├── 03_camera_auditoria_reps.png # Tela da câmera: captura de foto de anilhas
+│   └── 04_historico_sessoes.png    # Tela de histórico: métricas agregadas
 ├── src/
-│   ├── app/                        # telas e rotas do expo router
-│   │   ├── _layout.tsx             # configuracao das abas nativas
-│   │   ├── index.tsx               # tela principal: treino ativo e sensores
-│   │   ├── camera.tsx              # tela de captura de foto com expo-camera
-│   │   └── historico.tsx           # tela de historico e estatisticas
+│   ├── app/                        # Telas e rotas do Expo Router
+│   │   ├── _layout.tsx             # Configuração das abas nativas inferiores
+│   │   ├── index.tsx               # Tela principal: treino ativo e sensores
+│   │   ├── camera.tsx              # Tela de captura de foto com expo-camera
+│   │   └── historico.tsx           # Tela de histórico e estatísticas
 │   ├── constants/
-│   │   └── theme.ts                # tokens de cores escuras atleticas e espacamentos
-│   ├── hooks/                      # custom hooks de logica e sensores
-│   │   ├── useWorkoutTimer.ts      # cronometro esportivo com pause/resume
-│   │   ├── useArmMotionTracker.ts  # acelerometro e contador de repeticoes no braco
-│   │   └── useLocationTracker.ts   # gps, distancia e ritmo de pacing
-│   ├── services/                   # funcoes utilitarias e persistencia
-│   │   ├── locationService.ts      # calculos de haversine, pacing e formatacao
-│   │   └── storage.ts              # crud de sessoes via asyncstorage
+│   │   └── theme.ts                # Tokens de cores escuras atléticas e espaçamentos
+│   ├── hooks/                      # Custom hooks de lógica e sensores
+│   │   ├── useWorkoutTimer.ts      # Cronômetro esportivo com pause/resume
+│   │   ├── useArmMotionTracker.ts  # Acelerômetro e contador de repetições no braço
+│   │   └── useLocationTracker.ts   # GPS, distância e ritmo de pacing
+│   ├── services/                   # Funções utilitárias e persistência
+│   │   ├── locationService.ts      # Cálculos de Haversine, pacing e formatação
+│   │   └── storage.ts              # CRUD de sessões via AsyncStorage
 │   └── types/
-│       ├── workout.ts              # interfaces typescript de sessoes e sensores
-│       └── declarations.d.ts       # declaracoes globais de tipos
-├── app.json                        # configuracoes nativas e permissoes expo
-└── package.json                    # dependencias e scripts
+│       ├── workout.ts              # Interfaces TypeScript de sessões e sensores
+│       └── declarations.d.ts       # Declarações globais de tipos
+├── app.json                        # Configurações nativas e permissões Expo
+└── package.json                    # Dependências e scripts
 ```
 
 ---
@@ -74,3 +121,10 @@ App PAM/
   - Dígitos em formato de 48px a 72px (`fontVariant: ['tabular-nums']`), permitindo leitura fácil mesmo com o celular fixado na braçadeira a 40cm do rosto.
 - **Micro-indicadores Táteis**:
   - Pílulas de status e pontos luminosos em tempo real indicando se o GPS e o acelerômetro estão operando.
+
+---
+
+## 4. Manual Completo em PDF
+
+O projeto dispõe de documentação técnica oficial unificada em PDF contendo árvores de arquitetura, diagrama de máquina de estados FSM, formulação matemática detalhada e checklist de avaliação:
+- 📄 **[PAM_Fitness_Documentacao_Completa.pdf](PAM_Fitness_Documentacao_Completa.pdf)**
