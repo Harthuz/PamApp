@@ -207,15 +207,15 @@ npx tsc --noEmit
 npx expo lint
 
 # Regerar a documentação unificada em PDF (15 páginas com árvore de navegação)
-python docs/build_documentation_pdf.py
+python ../docs/build_documentation_pdf.py
 ```
 
 ---
 
 ## 📄 Documentação Completa em PDF
 
-Para consultar o manual técnico de engenharia de software com todos os cálculos, catálogo completo de hooks React e matriz de testes acadêmicos, acesse:
-- 📖 **[Manual de Engenharia e Especificação Técnica (PDF)](docs/PAM_Fitness_Documentacao_Completa.pdf)**
+Para consultar o manual técnico de engenharia de software com todos os cálculos, catálogo completo de hooks React e matriz de testes acadêmicos, acesse o diretório raiz:
+- 📖 **[Manual de Engenharia e Especificação Técnica (PDF)](../docs/PAM_Fitness_Documentacao_Completa.pdf)** (localizado na raiz do repositório)
 
 ---
 
