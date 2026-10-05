@@ -12,7 +12,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useFocusEffect } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
 import { clearAllSessions, deleteWorkoutSession, getWorkoutSessions } from '@/services/storage';
@@ -21,6 +21,7 @@ import { Radius, Spacing } from '@/constants/theme';
 import { WorkoutSession } from '@/types/workout';
 
 export default function HistoryScreen() {
+  const router = useRouter();
   // lista de treinos recuperados do asyncstorage
   const [sessions, setSessions] = useState<WorkoutSession[]>([]);
 
@@ -93,7 +94,13 @@ export default function HistoryScreen() {
       <View style={styles.container}>
         {/* cabecalho da tela de historico */}
         <View style={styles.header}>
-          <View>
+          <Pressable
+            style={styles.backButton}
+            onPress={() => router.back()}
+            hitSlop={8}>
+            <Ionicons name="arrow-back" size={22} color="#FFFFFF" />
+          </Pressable>
+          <View style={{ flex: 1 }}>
             <Text style={styles.title}>Histórico de Treinos</Text>
             <Text style={styles.subtitle}>Evolução e registros dos sensores</Text>
           </View>
@@ -267,6 +274,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: Spacing.sm,
+  },
+  backButton: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: '#18181B',
+    borderWidth: 1,
+    borderColor: '#27272A',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
   },
   title: {
     fontSize: 22,

@@ -55,7 +55,7 @@ export default function LoginScreenAndroid() {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <StatusBar style="light" backgroundColor={Colors.background} />
+      <StatusBar style="light" />
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled">
